@@ -41,51 +41,51 @@ def tokenize(input_code):
 
 
 def parse(tokens):
-    def parse_application(toks):
+    def parse_application(tokns):
         node = Node('APPLICATION')
-        while toks:
-            current_token = toks.pop(0)
+        while tokns:
+            current_token = tokns.pop(0)
             if current_token[0] == 'LAYOUT':
-                node.children.append(parse_layout(toks))
+                node.children.append(parse_layout(tokns))
             elif current_token[0] == 'COMPONENT':
-                node.children.append(parse_component(toks))
+                node.children.append(parse_component(tokns))
             elif current_token[0] == 'VAR':
-                node.children.append(parse_var(toks))
+                node.children.append(parse_var(tokns))
         return node
 
-    def parse_layout(toks):
+    def parse_layout(tokns):
         node = Node('LAYOUT')
-        while toks:
-            current_token = toks.pop(0)
+        while tokns:
+            current_token = tokns.pop(0)
             if current_token[0] == 'COMPONENT':
-                node.children.append(parse_component(toks))
+                node.children.append(parse_component(tokns))
             elif current_token[0] == 'LAYOUT':
-                node.children.append(parse_layout(toks))
+                node.children.append(parse_layout(tokns))
             elif current_token[0] == 'VAR':
-                node.children.append(parse_var(toks))
+                node.children.append(parse_var(tokns))
         return node
 
-    def parse_component(toks):
+    def parse_component(tokns):
         node = Node('COMPONENT')
-        while toks:
-            current_token = toks.pop(0)
+        while tokns:
+            current_token = tokns.pop(0)
             if current_token[0] == 'TEXT':
-                node.children.append(Node('TEXT', toks.pop(0)[1]))
+                node.children.append(Node('TEXT', tokns.pop(0)[1]))
             elif current_token[0] == 'ONCLICK':
-                node.children.append(Node('ONCLICK', toks.pop(0)[1]))
+                node.children.append(Node('ONCLICK', tokns.pop(0)[1]))
             elif current_token[0] == 'CSS':
-                node.children.append(parse_css(toks))
+                node.children.append(parse_css(tokns))
         return node
 
-    def parse_var(toks):
-        node = Node('VAR', toks.pop(0)[1])
+    def parse_var(tokns):
+        node = Node('VAR', tokns.pop(0)[1])
         return node
 
-    def parse_css(toks):
+    def parse_css(tokns):
         node = Node('CSS')
-        while toks and toks[0][0] != 'COMPONENT' and toks[0][0] != 'LAYOUT' and toks[0][0] != 'VAR':
-            current_token = toks.pop(0)
-            node.children.append(Node('CSS_PROPERTY', (current_token[0], toks.pop(0)[1])))
+        while tokns and tokns[0][0] != 'COMPONENT' and tokns[0][0] != 'LAYOUT' and tokns[0][0] != 'VAR':
+            current_token = tokns.pop(0)
+            node.children.append(Node('CSS_PROPERTY', (current_token[0], tokns.pop(0)[1])))
         return node
 
     return parse_application(tokens)
