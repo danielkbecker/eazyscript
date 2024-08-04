@@ -1,0 +1,6 @@
+application type:web
+  layout type:window
+    component type:button
+      text: "Click me"
+      onClick:
+        alert("Button clicked!")
